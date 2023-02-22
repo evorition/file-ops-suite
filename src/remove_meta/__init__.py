@@ -1,5 +1,6 @@
-import os
 import glob
+import os
+import time
 import win32com.client as win32
 
 
@@ -16,6 +17,7 @@ def remove_meta():
             print("Working with file:", absolute_path)
             try:
                 wb = excel.Workbooks.Open(absolute_path)
+                time.sleep(1)
             except:
                 print("Error occurred when tried to open file:", absolute_path)
                 continue
