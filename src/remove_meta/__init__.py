@@ -6,12 +6,12 @@ import win32com.client as win32
 
 
 def remove_meta():
-    link_log = open(file="links_log.txt", mode="w", encoding="utf-8")
     stop_word = "stresstest_lab"
 
     excel = win32.gencache.EnsureDispatch("Excel.Application")
     excel.Visible = False
     excel.DisplayAlerts = False
+    excel.AskToUpdateLinks = False
 
     filetypes = ["**/*.xls", "**/*.xlsx", "**/*.xlsm"]
 
@@ -30,13 +30,16 @@ def remove_meta():
             if workbook_links:
                 bad_links = list(filter(lambda link: stop_word in link, workbook_links))
                 if bad_links:
-                    link_log.write(f"In file {absolute_path} found bad links:\n")
-                    for bad_link in bad_links:
-                        link_log.write(f"- {bad_link}\n")
+                    with open(
+                        file="links_log.txt", mode="a+", encoding="utf-8"
+                    ) as links_log:
+                        links_log.write(f"In file {absolute_path} found bad links:\n")
+                        for bad_link in bad_links:
+                            links_log.write(f"- {bad_link}\n")
+                        links_log.write("---\n\n")
 
             wb.RemovePersonalInformation = True
             wb.Save()
             wb.Close()
 
-    link_log.close()
     excel.Quit()

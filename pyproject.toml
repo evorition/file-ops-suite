@@ -3,8 +3,8 @@ requires = ["setuptools",]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "remove_meta"
-version = "0.0.5"
+name = "find-bad-links"
+version = "0.0.6"
 authors = [
   { name = "Maxim Makovskiy", email = "makovskiyms@gmail.com" },
 ]
@@ -24,4 +24,4 @@ dependencies = [
 "Source" = "https://github.com/evorition/remove-meta"
 
 [project.scripts]
-remove-meta = "remove_meta:remove_meta"
+find-bad-links = "remove_meta:remove_meta"
