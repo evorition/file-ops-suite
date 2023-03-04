@@ -33,10 +33,10 @@ def remove_meta():
                     with open(
                         file="links_log.txt", mode="a+", encoding="utf-8"
                     ) as links_log:
-                        links_log.write(f"In file {absolute_path} found bad links:\n")
-                        for bad_link in bad_links:
-                            links_log.write(f"- {bad_link}\n")
-                        links_log.write("---\n\n")
+                        links_log.write(f"In file\n{absolute_path}\nfound bad links:\n")
+                        for index, bad_link in enumerate(bad_links, start=1):
+                            links_log.write(f"{index}. {bad_link}\n")
+                        links_log.write(f"{'-' * 10}\n\n")
 
             wb.RemovePersonalInformation = True
             wb.Save()
