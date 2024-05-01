@@ -3,20 +3,20 @@ requires = ["setuptools",]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "find-bad-links"
-version = "0.0.7"
+name = "file-ops-suite"
+version = "0.0.8"
 authors = [
   { name = "Maxim Makovskiy", email = "makovskiyms@gmail.com" },
 ]
-description = "Recursivly find all Excel files open them and remove personal information"
+description = "List of useful tools to work with MS Office and Power Bi"
 license = { text = "MIT" }
 classifiers = [
   "Environment :: Win32 (MS Windows)",
   "Operating System :: Microsoft :: Windows",
 ]
-requires-python = ">=3.7"
+requires-python = ">=3.9"
 dependencies = [
-  "pywin32",
+  "pywinauto",
 ]
 
 [project.urls]
@@ -24,4 +24,5 @@ dependencies = [
 "Source" = "https://github.com/evorition/remove-meta"
 
 [project.scripts]
-find-bad-links = "remove_meta:remove_meta"
+remove-meta = "scripts:remove_meta"
+relink = "scripts:relink"
