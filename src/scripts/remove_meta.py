@@ -5,35 +5,52 @@ import time
 import win32com.client as win32
 
 
+def initialize_application(
+    application_name, visible=True, ask_to_update=True, display_alerts=True
+):
+    app = win32.gencache.EnsureDispatch(application_name)
+    if visible:
+        app.Visible = False
+    if ask_to_update:
+        app.AskToUpdateLinks = False
+    if display_alerts:
+        app.DisplayAlerts = False
+    return app
+
+
 def remove_meta():
-    excel = win32.gencache.EnsureDispatch("Excel.Application")
-    excel.Visible = False
-    excel.DisplayAlerts = False
-    excel.AskToUpdateLinks = False
+    excel = initialize_application("Excel.Application")
+    power_point = initialize_application("PowerPoint.Application", False, False)
+    word = initialize_application("Word.Application", ask_to_update=False)
 
-    filetypes = ["**/*.xls", "**/*.xlsx", "**/*.xlsm"]
+    apps = {"Excel": excel, "PowerPoint": power_point, "Word": word}
 
-    for filetype in filetypes:
-        for file in glob.iglob(filetype, recursive=True):
-            absolute_path = os.path.abspath(file)
-            print("Working with file:", absolute_path)
-            try:
-                wb = excel.Workbooks.Open(absolute_path)
-                time.sleep(1)
-            except:
-                print(
-                    f"An error occurred while attempting to open the file at: {absolute_path}"
-                )
-                continue
+    filetypes = {
+        "Excel": ["**/*.xls", "**/*.xlsx", "**/*.xlsm"],
+        "PowerPoint": ["**/*.ppt", "**/*.pptx", "**/*.pptm"],
+        "Word": ["**/*.doc", "**/*.docx", "**/*.docm"],
+    }
 
-            try:
-                wb.RemovePersonalInformation = True
-                wb.Save()
-            except:
-                print(
-                    f"An error occurred while attempting to remove metadata at the following path: {absolute_path}"
-                )
-            finally:
-                wb.Close()
+    for app_name, app in apps.items():
+        for filetype in filetypes[app_name]:
+            for file in glob.iglob(filetype, recursive=True):
+                absolute_path = os.path.abspath(file)
+                print("Working with file:", absolute_path)
+                try:
+                    if app_name == "Excel":
+                        doc = app.Workbooks.Open(absolute_path)
+                    elif app_name == "PowerPoint":
+                        doc = app.Presentations.Open(absolute_path, WithWindow=False)
+                    else:
+                        doc = app.Documents.Open(absolute_path)
+                    time.sleep(1)
+                    doc.RemovePersonalInformation = True
+                    doc.Save()
+                except Exception:
+                    print(f"Error occurred while processing file: {absolute_path}")
+                    continue
+                finally:
+                    doc.Close()
 
-    excel.Quit()
+    for app in apps.values():
+        app.Quit()
