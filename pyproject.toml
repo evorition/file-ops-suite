@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "file-ops-suite"
-version = "0.0.9"
+version = "0.0.10"
 authors = [
   { name = "Maxim Makovskiy", email = "makovskiyms@gmail.com" },
 ]

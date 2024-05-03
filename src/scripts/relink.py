@@ -31,9 +31,6 @@ def relink():
         path_part = edit_path.get_value().split("data")[-1]
         edit_path.set_text(path + path_part)
         pb.child_window(title="OK", control_type="Button").click_input()
-        time.sleep(5)
+        time.sleep(2)
 
     pb.child_window(title="Close", control_type="Text").click_input()
-    pb.child_window(
-        title="Apply changes", control_type="Button", found_index=0
-    ).click_input()
